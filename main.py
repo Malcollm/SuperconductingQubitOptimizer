@@ -42,7 +42,7 @@ def hc_compiler(graph,freq_states):
     set_pauli_term(pauli_string_config([], freqs * qubits),
                    c1 * qubits * ((2 - freqs) ** 2) / 4, hc_data) # constant term
 
-    # Neighboring qubits should have different frequency's
+    # Neighboring qubits should have different frequencies
     c2 = 1 # Neighboring qubit cost coff
     for qubit in graph: # Loops though each qubit connecting path
         for path in graph[qubit]:
@@ -69,7 +69,7 @@ def hc_compiler(graph,freq_states):
     return list(hc_data.items())
 
 
-def set_pauli_term(pauli_string, coeff, hc_data):
+def set_pauli_term(pauli_string, coef, hc_data):
     """
     Adds a coefficient to a Pauli term in the Hamiltonian dictionary.
 
@@ -77,13 +77,13 @@ def set_pauli_term(pauli_string, coeff, hc_data):
     coefficient. Otherwise, a new term is created.
 
     :param pauli_string: (String) Pauli string
-    :param coeff: (float) Pauli term coefficient
+    :param coef: (float) Pauli term coefficient
     :param hc_data: (dict[str, float]) Dictionary of Hamiltonian terms
     """
     if pauli_string in hc_data:
-        hc_data[pauli_string] += coeff
+        hc_data[pauli_string] += coef
     else:
-        hc_data[pauli_string] = coeff
+        hc_data[pauli_string] = coef
 
 
 def pauli_string_config(z_places, length):
@@ -108,13 +108,13 @@ def pauli_string_config(z_places, length):
 
 
 qubit_graph = { # Graph of all qubits/connections indexed starting from 0 in sequential order
-    0 : [1, 2],
-    1 : [0, 2],
-    2 : [0, 1],
-    3 : [1],
+    0 : [1, 2, 3],
+    1 : [0, 3],
+    2 : [0],
+    3 : [0, 1],
 }
 
-freq_list = [4.9, 5.1, 5.15, 6, 6.2] # List of available frequency's in GHz
+freq_list = [4.9, 5.5, 6.2] # List of available frequency's in GHz
 
 h_c = SparsePauliOp.from_list(hc_compiler(qubit_graph, freq_list)) # Creates cost hamiltonian
 
